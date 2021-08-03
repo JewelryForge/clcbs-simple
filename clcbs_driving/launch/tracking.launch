@@ -1,6 +1,7 @@
 <launch>
     <arg name="map" default="$(find clcbs_driving)/config/map.yaml"/>
     <arg name="schedule" default="$(find clcbs_driving)/config/sch.yaml"/>
+
     <group ns="config">
         <rosparam file="$(arg map)" command="load"/>
         <rosparam file="$(arg schedule)" command="load"/>

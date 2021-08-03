@@ -2,7 +2,6 @@
 <package format="2">
   <name>clcbs_driving</name>
   <version>0.0.0</version>
-#find_package(yaml-cpp REQUIRED)
   <description>The clcbs_driving package used for driving agents to track trajectories.</description>
   <maintainer email="jewelry.zju@gmail.com">Chengrui Zhu</maintainer>
 

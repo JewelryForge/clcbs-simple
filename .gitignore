@@ -1,7 +1,5 @@
-clcbs_driving/cmake-build-debug/
-clcbs_driving/.idea/
 cmake-build-debug
-CMakeLists.txt
+./CMakeLists.txt
 /benchmark
 /hunter_ros/hunter_base/src/hunter_sdk
 .idea
