@@ -1,0 +1,14 @@
+<launch>
+    <arg name="map" default="$(find clcbs_driving)/config/map.yaml"/>
+    <arg name="schedule" default="$(find clcbs_driving)/config/sch.yaml"/>
+    <group ns="config">
+        <rosparam file="$(arg map)" command="load"/>
+        <rosparam file="$(arg schedule)" command="load"/>
+    </group>
+
+    <param name="is_sim" value="true"/>
+    <param name="is_real" value="false"/>
+    <param name="time_speed" value="0.6"/>
+
+    <node pkg="clcbs_driving" type="tracking" name="tracking" output="screen"/>
+</launch>

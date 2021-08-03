@@ -1,0 +1,37 @@
+parameters:
+  penalty_turning: 1.5
+  penalty_reversing: 2.0
+  penalty_cod: 2.0
+  map_resolution: 2.0
+  constraint_time: 2.0
+  safety_coeff: 1.5
+agents:
+  - name: agent0
+    start: [2, 2, 0.7854]
+    goal: [8, 8, 3.9270]
+    shape: [0.65, 0.33, 0.718]
+    turning_radius: 3.0
+    step_ratio: 0.33
+  - name: agent1
+    start: [8, 2, 2.3562]
+    goal: [2, 8, 5.4978]
+    shape: [0.65, 0.33, 0.718]
+    turning_radius: 3.0
+    step_ratio: 0.33
+  - name: agent2
+    start: [8, 8, 3.9270]
+    goal: [2, 2, 0.7854]
+    shape: [0.65, 0.33, 0.718]
+    turning_radius: 3.0
+    step_ratio: 0.33
+  - name: agent3
+    start: [2, 8, 5.4978]
+    goal: [8, 2, 2.3562]
+    shape: [0.65, 0.33, 0.718]
+    turning_radius: 3.0
+    step_ratio: 0.33
+map:
+  dimensions: [10, 10]
+  obstacles:
+    - location: [-10, -10]
+      radius: 0.1

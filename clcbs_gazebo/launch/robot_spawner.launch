@@ -1,0 +1,21 @@
+<launch>
+    <arg name="robot_name" default=""/>
+    <arg name="init_x" default="0"/>
+    <arg name="init_y" default="0"/>
+    <arg name="init_yaw" default="0"/>
+
+    <group ns="$(arg robot_name)">
+        <rosparam file="$(find clcbs_gazebo)/models/agent/config/gazebo_controller.yaml" command="load"/>
+        <param name="tf_prefix" value="$(arg robot_name)"/>
+        <param name="robot_description"
+               command="$(find xacro)/xacro $(find clcbs_gazebo)/models/agent/urdf/agent_sim.xacro ns:=$(arg robot_name)"/>
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+              args="-urdf -model $(arg robot_name) -param robot_description
+              -x $(arg init_x) -y $(arg init_y) -Y $(arg init_yaw)"/>
+        <node name="controller_spawner" pkg="controller_manager" type="spawner"
+              args="joint_state_controller left_wheel_controller right_wheel_controller"/>
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+        <node name="drive" pkg="clcbs_driving" type="diff_drive.py" output="screen"/>
+    </group>
+</launch>

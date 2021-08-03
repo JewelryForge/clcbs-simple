@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<robot name="course_agv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="PI" value="3.1415926535897931" />
+    <xacro:property name="mass" value="50" />
+    <xacro:property name="length" value="0.978" />
+    <xacro:property name="width" value="0.376" />
+    <xacro:property name="height" value="0.33" />
+    <xacro:property name="chassis_height" value="0.103" />
+    <xacro:property name="caster_radius" value="${chassis_height/2}" />
+    <xacro:property name="wheel_mass" value="0.5" />
+    <xacro:property name="caster_mass" value="${wheel_mass}" />
+    <xacro:property name="wheel_radius" value="0.164" />
+    <xacro:property name="wheel_thickness" value="0.1725" />
+    <xacro:property name="base_to_back" value="0.1725" />
+    <xacro:property name="base_to_caster" value="0.6" />
+    <xacro:property name="center_span" value="0.0" />
+
+    <xacro:property name="urdf_src" value="$(find clcbs_gazebo)/models/agent/urdf/" />
+
+
+    <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+    <xacro:include filename="${urdf_src}/agent_sim.gazebo" />
+    <!-- Import Rviz colors -->
+    <xacro:include filename="${urdf_src}/materials.xacro" />
+
+    <!-- joints and links-->
+
+    <link name="base_link" />
+
+    <!-- left wheel -->
+    <joint name="agent_leftwheel_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="agent_leftwheel_link" />
+        <origin rpy="0 ${PI/2.0} ${PI/2.0}" xyz="0.0 ${(width / 2.0 + wheel_thickness / 2.0)} ${wheel_radius}" />
+        <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00" />
+        <limit effort="100" lower="0" upper="0" velocity="10" />
+    </joint>
+    <link name="agent_leftwheel_link">
+        <inertial>
+            <mass value="${wheel_mass}" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder length="${wheel_thickness}" radius="${wheel_radius}" />
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder length="${wheel_thickness}" radius="${wheel_radius}" />
+            </geometry>
+            <material name="grey" />
+        </visual>
+    </link>
+
+    <!-- right wheel -->
+    <joint name="agent_rightwheel_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="agent_rightwheel_link" />
+        <origin rpy="0 ${PI/2.0} ${PI/2.0}" xyz="0.0 ${-(width / 2.0 + wheel_thickness / 2.0)}  ${wheel_radius}" />
+        <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00" />
+        <limit effort="100" lower="0" upper="0" velocity="10" />
+    </joint>
+    <link name="agent_rightwheel_link">
+        <inertial>
+            <mass value="${wheel_mass}" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder length="${wheel_thickness}" radius="${wheel_radius}" />
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder length="${wheel_thickness}" radius="${wheel_radius}" />
+            </geometry>
+            <material name="grey" />
+        </visual>
+    </link>
+
+    <!-- chassis -->
+    <joint name="agent_chassis_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="robot_chassis" />
+        <origin xyz="${-center_span} 0.0 0.0" />
+    </joint>
+    <link name="robot_chassis">
+        <inertial>
+            <mass value="${mass}" />
+            <origin rpy="0 0 0" xyz="${length / 2 - base_to_back} 0.0 ${height / 2.0 + chassis_height}" /> <!-- CHANGE HERE TO SEE INFLUENCE-->
+            <inertia ixx="${mass / 12.0 * (width*width+height*height)}" ixy="0" ixz="0" 
+                iyy="${mass / 12.0 * (length*length + height*height)}" iyz="0" izz="${mass / 12.0 * (width*width + length*length)}" />
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="${length / 2 - base_to_back} 0.0 ${height / 2.0 + chassis_height}" />
+            <geometry>
+                <box size="${length} ${width} ${height}" />
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0 0 0" xyz="${length / 2 - base_to_back} 0.0 ${height / 2.0 + chassis_height}" />
+            <geometry>
+                <box size="${length} ${width} ${height}" />
+            </geometry>
+            <material name="yellow" />
+        </visual>
+        <inertial>
+            <mass value="${caster_mass}" />
+            <origin rpy="0 0 0" xyz="${base_to_caster} ${width / 2 - caster_radius} ${caster_radius}" />
+            <inertia ixx="${2.0 / 5.0 * mass * caster_radius * caster_radius}" ixy="0" ixz="0" 
+                iyy="${2.0 / 5.0 * mass * caster_radius * caster_radius}" iyz="0" izz="${2.0 / 5.0 * mass * caster_radius * caster_radius}" />
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="${base_to_caster} ${width / 2 - caster_radius} ${caster_radius}" />
+            <geometry>
+                <sphere radius="${caster_radius}" />
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0 0 0" xyz="${base_to_caster} ${width / 2 - caster_radius} ${caster_radius}" />
+            <geometry>
+                <sphere radius="${caster_radius}" />
+            </geometry>
+            <material name="yellow" />
+        </visual>
+        <inertial>
+            <mass value="${caster_mass}" />
+            <origin rpy="0 0 0" xyz="${base_to_caster} ${-width / 2 - caster_radius} ${caster_radius}" />
+            <inertia ixx="${2.0 / 5.0 * mass * caster_radius * caster_radius}" ixy="0" ixz="0" 
+                iyy="${2.0 / 5.0 * mass * caster_radius * caster_radius}" iyz="0" izz="${2.0 / 5.0 * mass * caster_radius * caster_radius}" />
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="${base_to_caster} ${-width / 2 + caster_radius} ${caster_radius}" />
+            <geometry>
+                <sphere radius="${caster_radius}" />
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0 0 0" xyz="${base_to_caster} ${-width / 2 + caster_radius} ${caster_radius}" />
+            <geometry>
+                <sphere radius="${caster_radius}" />
+            </geometry>
+            <material name="yellow" />
+        </visual>
+    </link>
+
+    
+    <transmission name="tran_left_wheel">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="agent_leftwheel_joint">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor_left">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="tran_right_wheel">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="agent_rightwheel_joint">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor_right">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+</robot>

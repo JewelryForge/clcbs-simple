@@ -1,0 +1,33 @@
+<launch>
+
+    <include file="$(find clcbs_gazebo)/launch/robot_spawner.launch">
+        <arg name="robot_name" value="agent0"/>
+        <arg name="init_x" value="-3.0"/>
+        <arg name="init_y" value="-3.0"/>
+        <arg name="init_yaw" value="0.7854"/>
+    </include>
+
+    <include file="$(find clcbs_gazebo)/launch/robot_spawner.launch">
+        <arg name="robot_name" value="agent1"/>
+        <arg name="init_x" value="3.0"/>
+        <arg name="init_y" value="-3.0"/>
+        <arg name="init_yaw" value="2.3562"/>
+    </include>
+
+    <include file="$(find clcbs_gazebo)/launch/robot_spawner.launch">
+        <arg name="robot_name" value="agent2"/>
+        <arg name="init_x" value="3.0"/>
+        <arg name="init_y" value="3.0"/>
+        <arg name="init_yaw" value="3.927"/>
+    </include>
+
+    <include file="$(find clcbs_gazebo)/launch/robot_spawner.launch">
+        <arg name="robot_name" value="agent3"/>
+        <arg name="init_x" value="-3.0"/>
+        <arg name="init_y" value="3.0"/>
+        <arg name="init_yaw" value="5.5"/>
+    </include>
+
+    <node pkg="clcbs_gazebo" type="gazebo2tf.py" name="robot_base_tf_publisher"
+          args="agent0/base_link agent1/base_link agent2/base_link agent3/base_link"/>
+</launch>
